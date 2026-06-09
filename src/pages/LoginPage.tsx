@@ -19,7 +19,7 @@ export function LoginPage() {
                     ¿No tienes cuenta? <span className="font-medium text-gray-700 cursor-pointer hover:underline">Ponte en contacto con el administrador.</span>
                 </p>
 
-                {/* Inyectamos nuestro formulario con lógica */}
+                {/* formulario con logica */}
                 <LoginForm />
 
             </div>

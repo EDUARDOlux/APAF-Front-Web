@@ -19,10 +19,10 @@ export function AuthLayout({ children }: AuthLayoutProps) {
 
             {/*  Derecho*/}
             <div className="hidden lg:flex w-1/2 bg-[#014A24] items-center justify-center relative overflow-hidden">
-                {/* Decoración de fondo (Círculo sutil opcional) */}
+                {/* Círculo */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
 
-                {/* El Carrusel que creamos arriba */}
+                {/* Carrusel */}
                 <AuthCarousel />
             </div>
         </div>
