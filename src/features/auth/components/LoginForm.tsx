@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-
+import { Link } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 
@@ -97,9 +97,9 @@ export function LoginForm() {
                     </label>
                 </div>
 
-                <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#014A24] underline transition-colors">
+                <Link to="/recover-password" className="text-sm font-medium text-gray-700 hover:text-[#014A24] underline transition-colors">
                     ¿Has olvidado tu contraseña?
-                </a>
+                </Link>
             </div>
 
             {/* Boton  Submit */}
