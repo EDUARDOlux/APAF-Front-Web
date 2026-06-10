@@ -10,9 +10,9 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white">
 
             {/* Izquierdo*/}
-            <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 lg:p-24 relative">
+            <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-1 lg:p-4 relative">
                 {/* Contenedor*/}
-                <div className="w-full max-w-md">
+                <div className="w-auto max-w-md">
                     {children}
                 </div>
             </div>
@@ -21,7 +21,6 @@ export function AuthLayout({ children }: AuthLayoutProps) {
             <div className="hidden lg:flex w-1/2 bg-[#014A24] items-center justify-center relative overflow-hidden">
                 {/* Círculo */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-
                 {/* Carrusel */}
                 <AuthCarousel />
             </div>

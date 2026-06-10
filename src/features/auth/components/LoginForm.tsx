@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Link } from 'react-router-dom';
+import { useAuthLockStore } from '../../../store/useAuthLockStore';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 
@@ -21,6 +22,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
+    const recordFailedAttempt = useAuthLockStore((state) => state.recordFailedAttempt);
 
     // React Hook Form
     const {
@@ -45,10 +47,15 @@ export function LoginForm() {
 
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        console.log("¡Login exitoso simulado!");
+        // Simulando fallo para testear la pantalla de bloqueo
+        console.error("Simulando error de login para probar bloqueo...");
+        recordFailedAttempt();
+
         setIsLoading(false);
 
-        // Futuro redireccionamiento al Dashboard
+        // Cuando la API real esté lista:
+        // si es exitoso: redirigir
+        // si falla: recordFailedAttempt()
     };
 
     return (
