@@ -38,7 +38,7 @@ export function LoginForm() {
         }
     });
 
-    // Función (Mock del Backend)
+    // Funcion (Mock del Backend)
     const onSubmit = async (data: LoginFormValues) => {
         setIsLoading(true);
 
@@ -47,7 +47,7 @@ export function LoginForm() {
 
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        // Simulando fallo para testear la pantalla de bloqueo
+        // Simulancion bloqueo
         console.error("Simulando error de login para probar bloqueo...");
         recordFailedAttempt();
 
