@@ -53,7 +53,7 @@ export function LoginForm() {
 
         setIsLoading(false);
 
-        // Cuando la API real esté lista:
+        // Cuando la API real este lista:
         // si es exitoso: redirigir
         // si falla: recordFailedAttempt()
     };
