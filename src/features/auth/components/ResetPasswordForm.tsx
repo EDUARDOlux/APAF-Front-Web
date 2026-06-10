@@ -35,7 +35,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ token }) =
 
   useEffect(() => {
     if (resetPasswordMutation.isSuccess) {
-      reset(); // Limpia el formulario en caso de éxito
+      reset(); // Limpia 
     }
   }, [resetPasswordMutation.isSuccess, reset]);
 
