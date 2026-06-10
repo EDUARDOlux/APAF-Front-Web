@@ -37,7 +37,7 @@ export function RecoverPasswordForm() {
       </p>
 
       {isSuccess ? (
-        <div className="bg-green-50 border border-green-200 text-[#014A24] px-4 py-3 rounded-lg mb-6">
+        <div className="bg-[#D5E1DE] border-[#D5E1DE] text-[#014A24] px-4 py-3 rounded-[10px] mb-6">
           <p className="text-sm font-medium">{data?.message}</p>
         </div>
       ) : (
