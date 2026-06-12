@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Users,
   Briefcase,
-  ShieldAlert,
-  Building2,
   PieChart,
   Activity,
-  FileText,
-  X
+  ChevronDown,
+  ChevronRight,
+  Wallet
 } from 'lucide-react';
 
 export interface NavigationItem {
   name: string;
-  path: string;
-  icon: React.ComponentType<{ className?: string }>;
+  path?: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  children?: NavigationItem[];
   requiredPermission?: string;
 }
 
@@ -25,13 +25,46 @@ export interface UserProfileBadgeProps {
 }
 
 const NAVIGATION_ITEMS: NavigationItem[] = [
-  { name: 'Gestión de Usuarios', path: '/usuarios', icon: Users },
   { name: 'Cartera', path: '/cartera', icon: Briefcase },
-  { name: 'Límite de Riesgos', path: '/limite-riesgos', icon: ShieldAlert },
-  { name: 'Análisis Sucursal', path: '/analisis-sucursal', icon: Building2 },
-  { name: 'Análisis Cartera', path: '/analisis-cartera', icon: PieChart },
-  { name: 'Seguimiento', path: '/seguimiento', icon: Activity },
-  { name: 'Cartera EPRC', path: '/cartera-eprc', icon: FileText },
+  { name: 'Límite de concentración', path: '/limite-concentracion', icon: PieChart },
+  { name: 'Gestión de Usuarios', path: '/usuarios', icon: Users },
+  {
+    name: 'Analisis cartera',
+    icon: Wallet,
+    children: [
+      { name: 'Límite de Riesgos', path: '/analisis-cartera/limite-riesgos' },
+    ]
+  },
+  {
+    name: 'Analisis Financiero cartera',
+    icon: Activity,
+    children: [
+      {
+        name: 'Análisis Sucursal',
+        children: [
+          { name: 'Consolidada', path: '/analisis-cartera/financiero/sucursal/consolidada' },
+          { name: 'Sucursales', path: '/analisis-cartera/financiero/sucursal/sucursales' }
+        ]
+      },
+      {
+        name: 'Análisis Cartera',
+        children: [
+          { name: 'Productos', path: '/analisis-cartera/financiero/cartera/productos' },
+          { name: 'Tipo de Cartera vencida', path: '/analisis-cartera/financiero/cartera/vencida' },
+          { name: 'Tipo de Cartera vigente', path: '/analisis-cartera/financiero/cartera/vigente' },
+          { name: 'Cartera de Crédito Total', path: '/analisis-cartera/financiero/cartera/total' }
+        ]
+      },
+      {
+        name: 'Seguimiento',
+        children: [
+          { name: 'Cartera de Crédito', path: '/analisis-cartera/seguimiento/credito' },
+          { name: 'Cartera consolidado', path: '/analisis-cartera/seguimiento/consolidado' },
+        ]
+      },
+      { name: 'Cartera EPRC', path: '/analisis-cartera/seguimiento/eprc' }
+    ]
+  },
 ];
 
 interface SidebarProps {
@@ -41,6 +74,79 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userProfile }) => {
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+  const toggleFolder = (folderName: string) => {
+    setExpandedItems((prev) => ({
+      ...prev,
+      [folderName]: !prev[folderName]
+    }));
+  };
+
+  const renderNavItems = (items: NavigationItem[], depth = 0) => {
+    return items.map((item) => {
+      const isFolder = !!item.children && item.children.length > 0;
+      const isExpanded = expandedItems[item.name];
+
+      const paddingLeft = `${depth * 1.5 + 0.75}rem`;
+
+      if (isFolder) {
+        return (
+          <div key={item.name} className="flex flex-col">
+            <button
+              onClick={() => toggleFolder(item.name)}
+              className="flex items-center justify-between w-full py-2.5 pr-3 rounded-lg transition-colors text-white/80 hover:bg-white/5 hover:text-white"
+              style={{ paddingLeft }}
+            >
+              <div className="flex items-center gap-3 overflow-hidden">
+                {item.icon && <item.icon className="w-5 h-5 shrink-0" />}
+                <span className="truncate text-left">{item.name}</span>
+              </div>
+              {isExpanded ? (
+                <ChevronDown className="w-4 h-4 shrink-0 ml-2" />
+              ) : (
+                <ChevronRight className="w-4 h-4 shrink-0 ml-2" />
+              )}
+            </button>
+
+            {isExpanded && (
+              <div className="mt-1 space-y-1 flex flex-col">
+                {renderNavItems(item.children!, depth + 1)}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <NavLink
+          key={item.path || item.name}
+          to={item.path || '#'}
+          onClick={() => {
+            if (window.innerWidth < 1024) onClose();
+          }}
+          style={{ paddingLeft }}
+          className={({ isActive }) =>
+            `flex items-center gap-3 py-2.5 pr-3 rounded-lg transition-colors relative group overflow-hidden ${isActive
+              ? 'bg-white/10 text-white font-medium'
+              : 'text-white/80 hover:bg-white/5 hover:text-white'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              {isActive && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full" />
+              )}
+              {item.icon && <item.icon className="w-5 h-5 shrink-0" />}
+              <span className="truncate">{item.name}</span>
+            </>
+          )}
+        </NavLink>
+      );
+    });
+  };
+
   // Iniciales del usuario
   const initials = userProfile.name
     .split(' ')
@@ -76,32 +182,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userProfile }
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-6 overflow-y-auto space-y-1">
-          {NAVIGATION_ITEMS.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => {
-                if (window.innerWidth < 1024) onClose();
-              }}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors relative group overflow-hidden ${isActive
-                  ? 'bg-white/10 text-white font-medium'
-                  : 'text-white/80 hover:bg-white/5 hover:text-white'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  {/* Indicador activo a la izquierda */}
-                  {isActive && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full" />
-                  )}
-                  <item.icon className="w-5 h-5 shrink-0" />
-                  <span className="truncate">{item.name}</span>
-                </>
-              )}
-            </NavLink>
-          ))}
+          {renderNavItems(NAVIGATION_ITEMS)}
         </nav>
 
         {/* User Profile Badge */}
