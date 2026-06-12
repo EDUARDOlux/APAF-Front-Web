@@ -3,6 +3,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
 import { ResetPasswordPage } from '../pages/ResetPasswordPage';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute';
+import { DashboardLayout } from '../layouts/DashboardLayout';
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,16 @@ export const router = createBrowserRouter([
     // Rutas Protegidas
     element: <ProtectedRoute />,
     children: [
-      // Aquí irán las futuras rutas privadas.
+      {
+        element: <DashboardLayout />,
+        children: [
+          // rutas privadas del sistema
+          {
+            index: true,
+            element: <div className="p-8 text-gray-500">Seleccione un módulo del menú lateral</div>,
+          }
+        ],
+      }
     ],
   },
   {
