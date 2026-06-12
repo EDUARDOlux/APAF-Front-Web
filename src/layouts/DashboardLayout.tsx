@@ -2,24 +2,13 @@ import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
+import { HEADER_MAP } from './config/header';
 
 export const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
-  // Mapeo temporal de rutas a títulos para el Header
-  const getSectionTitle = (path: string) => {
-    switch (path) {
-      case '/usuarios': return 'Gestión de Usuarios';
-      case '/cartera': return 'Cartera';
-      case '/limite-riesgos': return 'Límite de Riesgos';
-      case '/analisis-sucursal': return 'Análisis Sucursal';
-      case '/analisis-cartera': return 'Análisis Cartera';
-      case '/seguimiento': return 'Seguimiento';
-      case '/cartera-eprc': return 'Cartera EPRC';
-      default: return 'Dashboard';
-    }
-  };
+  const headerData = HEADER_MAP[location.pathname] || HEADER_MAP['fallback'];
 
   // Perfil mockeado temporalmente.
   const userProfile = {
@@ -37,7 +26,7 @@ export const DashboardLayout: React.FC = () => {
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden relative">
         <Header
-          currentSectionTitle={getSectionTitle(location.pathname)}
+          data={headerData}
           onMenuClick={() => setIsSidebarOpen(true)}
         />
 
