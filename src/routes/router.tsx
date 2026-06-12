@@ -4,6 +4,7 @@ import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
 import { ResetPasswordPage } from '../pages/ResetPasswordPage';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute';
 import { DashboardLayout } from '../layouts/DashboardLayout';
+import { UsersPage } from '../pages/UsersPage';
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <div className="p-8 text-gray-500">Seleccione un módulo del menú lateral</div>,
+          },
+          {
+            path: 'usuarios',
+            element: <UsersPage />,
           }
         ],
       }
